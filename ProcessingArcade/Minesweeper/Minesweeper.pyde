@@ -6,60 +6,69 @@ global rows, cells, game_ready, game_in_progress, now_ms, game_time_sec
 rows = None                  # same number of columns as rows
 cells = None
 start_button = None
+easy_button = None
+hard_button = None
 game_ready = False
 game_in_progress = False
 game_time_sec = None
 now_ms = None
 
+
 #
 # Game settings
 #
 global cell_width, header_height, num_of_mines, mines_flagged, cell_color
-cell_width = 40              # in pixels
+cell_width = 60              # in pixels
 header_height = cell_width   # height of game info header
 num_of_mines = 10            # number of mines in the game
 mines_flagged = 0            # number of mines flagged
-cell_color = '#C0C0C0'       # color of unrevealed cell
+cell_color = '#A0C0C0'       # color of unrevealed cell
 
 #
 # *** START HERE ***
 # First steps are to create the program window, cells, and mines
 #
 def setup():
-    pass
+
     # 1. Use size(width, height) to set the width and height of the window
     #size(400, 440)
-    
+    size(10*cell_width, 10*cell_width+60)
     # 2. Use the initialize_game_data() function to set up the game header
     #initialize_game_data()
-    
+    initialize_game_data()
     # 3. Use the initialize_cells() function to set up the playing grid cells
-    
+    initialize_cells()
     # 4. Use the initialize_mines() function to randomly place the mines
-
+    initialize_mines()
 
 def draw():
-    pass
+
     # 5. Use an if statement to check if the 'game_ready' variable is set to True
-        
+    if game_ready:
         # 6. Use background(color) to set the game's background
         # Do you see your color when you run the code?
-        
+        background(110, 70, 220)
+        if not game_in_progress:
+            initialize_game_data()
+            initialize_cells()
+            initialize_mines()
         # 7. Use the draw_game_header() function to draw the game's header
         # Skip down and complete the draw_game_header() function
-        
+        draw_game_header()
         # 8. Complete the instructions in draw_game_header() below FIRST!
 
         # 12. Use a for loop to go through each cell in the 'cells' list variable 
-            
+        for cell in cells:
             # 13. Call each cell's draw() method
             # Do you see the grid of cells?
+            cell.draw()
 
         
         # 14. Use the update_game_time() function to count the game seconds
         # when the game starts.
         # Does the game start counting up the seconds when the start button is pressed?
-
+        if game_in_progress:
+            update_game_time()
         
         # *** ENHANCEMENTS ***
         # * Changing the game background color?
@@ -72,20 +81,26 @@ def draw():
 # Draw top game header with # mines, start button, elapsed time
 #            
 def draw_game_header():
-    pass
+    global num_of_mines, mines_flagged, game_time_sec
     # 9. Use the text("my text", x, y) function to draw the remaining number
     # of mines at the top of window
     #    - num_of_mines variable holds the total number of mines in the game
     #    - mines_flagged variable holds the number of mines that have been flagged
     #    - Use fill(color) to change the text color
     #    - Use textSize(int_size) to change the size of the text
-
+    fill(250, 20, 20)
+    textSize(30)
+    text("Mines: " + str(num_of_mines-mines_flagged), 250, 30)
     # 10. Use the text("my text", x, y) function to draw the game time
     #    - the 'game_time_sec' variable holds the number of seconds
     #      since the game started
+    text("Time: " + str(game_time_sec), 430, 30)
     
     # 11. Call draw() from the start_button to draw the start button
     # Do you see the start button, mines left, and game timer?
+    start_button.draw()
+    easy_button.draw()
+    hard_button.draw()
 
 
 
@@ -123,7 +138,7 @@ def check_cell_pressed():
 # Setup cell size, images, and start button
 #
 def initialize_game_data():
-    global rows, game_time_sec, start_button
+    global rows, game_time_sec, start_button, easy_button, hard_button
 
     # Don't use height becuase it includes the game header
     rows = width / cell_width
@@ -133,7 +148,11 @@ def initialize_game_data():
     game_time_sec = 0
     
     if start_button is None:
-        start_button = Button("Start", (width / 2) - 50, 0, 100, cell_width)
+        start_button = Button("Start", 170, 0, 70, cell_width)
+    if easy_button is None:
+        easy_button = Button("Easy", 10, 0, 70, cell_width)
+    if hard_button is None:
+        hard_button = Button("Hard", 90, 0, 70, cell_width)
 
 #
 # Setup cells, place mines, start game timer
@@ -234,7 +253,7 @@ def reveal_cell(cell):
 # Left mouse button: reveal cell (mine, number, or empty)
 #
 def mousePressed():
-    global game_in_progress, mines_flagged
+    global game_in_progress, mines_flagged, cell_width, num_of_mines
     
     if start_button.mouse_is_over():
         game_in_progress = True
@@ -243,6 +262,12 @@ def mousePressed():
         initialize_mines()
         start_game_timer()
         return
+    elif easy_button.mouse_is_over():
+        cell_width = 60
+        num_of_mines = 10
+    elif hard_button.mouse_is_over():
+        cell_width = 40
+        num_of_mines = 22
     elif not game_in_progress:
         # Don't allow clicking on the cells before pressing the start button
         return

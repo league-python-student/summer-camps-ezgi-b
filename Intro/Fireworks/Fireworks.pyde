@@ -26,11 +26,11 @@ def draw():
     tint(255, 50)
     # 7. Call the firework variable's draw() method 
     # Do you see the firework when you run the program?
-    
+    firework.draw()
     # 8. Use an 'if' statement and the mousePressed variable to check if the
     # the mouse is pressed
     if mousePressed:
-        pass
+        firework = Firework(mouseX, mouseY)
         # 9. Set the 'firework' variable to a new Firework at mouseX and mouseY
         # Do you see the firework when the mouse is pressed?
         #firework = Firework(mouseX, mouseY)
@@ -40,8 +40,11 @@ def draw():
         #set_multi_colored_firework()
         #set_firework_size(min_size, max_size)
         #set_sparkle(True)
+        firework.set_color(color(200, 140, 250))
+        firework.set_firework_size(2, 20)
+        firework.set_sparkle(True)
         
-        #set_sound("arcade_explode2.mp3")
+        # firework.set_sound("arcade_explode2.mp3")
         # other sounds to choose from:
         #   arcade_explode1.mp3, arcade_explode2.mp3, arcade_explode3.mp3 
         #   arcade_bomb1.mp3, arcade_bomb2.mp3, arcade_bomb3.mp3
