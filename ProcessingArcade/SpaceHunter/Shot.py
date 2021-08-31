@@ -13,7 +13,7 @@ class Shot:
         if self.width > 0:
             push()
         
-            fill(0, 230, 230)
+            fill(170, 100, 230)
             stroke(128, 0, 128)
             strokeWeight(2)
             circle(mouseX, mouseY, self.width)

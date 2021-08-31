@@ -68,28 +68,38 @@ class Alien:
             
         # Random movement pattern
         rand = random(100)
-        if rand < 50.0:
+        if rand < 33.333:
             self.move_pattern = 'linear'
-        else:
+        elif rand < 66.6666:
             self.move_pattern = 'arc'
+        else:
+            self.move_pattern = 'bounce'
+            self.y_speed = int(random(4, 7))
+            self.x_speed = int(random(4, 7))
     
     def move(self):
         if self.move_pattern == 'arc':
             self.x_speed *= Alien.arc_speed
             self.y_speed *= Alien.arc_speed
+        if self.move_pattern == 'bounce':
+            if (self.y < 100 and self.y_speed < 0) or (self.y > height - 100 and self.y_speed > 0):
+                self.y_speed *= -1
+            if (self.x < 100 and self.x_speed < 0) or (self.x > width - 100 and self.x_speed > 0):
+                self.x_speed *= -1
             
         x_dir = self.x_speed
         y_dir = self.y_speed
         
         # Ensure alien moves across the screen
-        if self.move_direction == 'left':
-            x_dir = -self.speed
-        elif self.move_direction == 'right':
-            x_dir = self.speed
-        elif self.move_direction == 'up':
-            y_dir = -self.speed
-        elif self.move_direction == 'down':
-            y_dir = self.speed
+        if self.move_pattern != 'bounce':
+            if self.move_direction == 'left':
+                x_dir = -self.speed
+            elif self.move_direction == 'right':
+                x_dir = self.speed
+            elif self.move_direction == 'up':
+                y_dir = -self.speed
+            elif self.move_direction == 'down':
+                y_dir = self.speed
 
         self.x += x_dir
         self.y += y_dir

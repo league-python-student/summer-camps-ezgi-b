@@ -110,12 +110,15 @@ def draw_game_header():
 # Win or lose, reveal all cells
 #
 def game_end(state):
-    global game_in_progress
+    global game_in_progress, game_time_sec
     
     game_in_progress = False
     
     if state.lower() == "won":
         Cell.mine_img = Cell.won_img
+        print("You won after " + str(game_time_sec) + " seconds!")
+    else:
+        print("You lost.")
         
     for c in cells:
         c.revealed = True
@@ -262,10 +265,10 @@ def mousePressed():
         initialize_mines()
         start_game_timer()
         return
-    elif easy_button.mouse_is_over():
+    elif easy_button.mouse_is_over() and not game_in_progress:
         cell_width = 60
         num_of_mines = 10
-    elif hard_button.mouse_is_over():
+    elif hard_button.mouse_is_over() and not game_in_progress:
         cell_width = 40
         num_of_mines = 22
     elif not game_in_progress:
